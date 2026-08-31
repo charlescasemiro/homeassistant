@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "minor_version": 1,
+  "key": "person",
+  "data": {
+    "items": [
+      {
+        "id": "pokehouse",
+        "name": "pokehouse",
+        "user_id": "57e3217198f24ca6841d9ea2eef2b85f",
+        "device_trackers": []
+      }
+    ]
+  }
+}
