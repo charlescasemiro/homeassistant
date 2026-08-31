@@ -1,39 +1,29 @@
+version: '3.8'
+
 services:
   homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
     container_name: homeassistant
-    image: "ghcr.io/home-assistant/home-assistant:stable"
+    restart: unless-stopped
+    network_mode: host
+    privileged: true # Allows raw USB/serial device handling
+    environment:
+      - TZ=UTC
     volumes:
       - ./config:/config
       - /etc/localtime:/etc/localtime:ro
-    restart: unless-stopped
-    privileged: true
-    ports:
-      - "80:8123"
-
-  adguard:
-    container_name: adguardhome
-    image: adguard/adguardhome:latest
-    restart: unless-stopped
-    volumes:
-      - ./adguard_work:/opt/adguardhome/work
-      - ./adguard_conf:/opt/adguardhome/conf
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "3000:3000/tcp"
-      - "8080:8080/tcp"
-    network_mode: host
+      - /run/dbus:/run/dbus:ro # Enables Bluetooth discovery on the host
+    devices:
+      # Pass through your Zigbee USB Dongle (Update device path if needed, e.g., /dev/ttyACM0 or /dev/ttyUSB0)
+      - /dev/ttyUSB0:/dev/ttyUSB0
 
   matter-server:
     image: ghcr.io/home-assistant-libs/python-matter-server:stable
     container_name: matter-server
     restart: unless-stopped
+    network_mode: host
     security_opt:
       - apparmor=unconfined
-    ports:
-      - "5580:5580"
-      - "5540:5540/tcp" # Matter commissioning port
-      - "5540:5540/udp"
     volumes:
       - ./matter-data:/data
-    network_mode: host
+      - /run/dbus:/run/dbus:ro # Enables Matter commissioning via host Bluetooth
