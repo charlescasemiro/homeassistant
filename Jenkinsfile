@@ -65,7 +65,7 @@ pipeline {
                     def images = sh(
                         script: '''
                             set -eu
-                            docker compose \
+                            sudo -n docker compose \
                               --project-directory "$HA_DEPLOY_DIR" \
                               --project-name homeassistant \
                               --file "$WORKSPACE/docker-compose.yaml" \
@@ -82,7 +82,7 @@ pipeline {
 
                     env.HA_TARGET_IMAGE = images[0]
                     env.HA_RUNNING_IMAGE = sh(
-                        script: "docker inspect --type container --format='{{.Config.Image}}' homeassistant",
+                        script: "sudo -n docker inspect --type container --format='{{.Config.Image}}' homeassistant",
                         returnStdout: true
                     ).trim()
                     env.HA_DEPLOY_REQUIRED = (
@@ -197,22 +197,22 @@ print(url)
             steps {
                 sh '''
                     set -eu
-                    docker compose \
+                    sudo -n docker compose \
                       --project-directory "$HA_DEPLOY_DIR" \
                       --project-name homeassistant \
                       --file "$WORKSPACE/docker-compose.yaml" \
                       pull homeassistant
-                    docker compose \
+                    sudo -n docker compose \
                       --project-directory "$HA_DEPLOY_DIR" \
                       --project-name homeassistant \
                       --file "$WORKSPACE/docker-compose.yaml" \
                       up -d --no-deps homeassistant
-                    docker compose \
+                    sudo -n docker compose \
                       --project-directory "$HA_DEPLOY_DIR" \
                       --project-name homeassistant \
                       --file "$WORKSPACE/docker-compose.yaml" \
                       ps homeassistant
-                    running_image="$(docker inspect --type container --format='{{.Config.Image}}' homeassistant)"
+                    running_image="$(sudo -n docker inspect --type container --format='{{.Config.Image}}' homeassistant)"
                     if [ "$running_image" != "$HA_TARGET_IMAGE" ]; then
                       echo "Expected $HA_TARGET_IMAGE after deployment, found $running_image" >&2
                       exit 1

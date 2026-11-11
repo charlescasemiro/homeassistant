@@ -26,10 +26,14 @@ container image matches the pinned Compose image.
 
 Create a Jenkins Pipeline job using this repository, branch `*/master`, and
 script path `Jenkinsfile`. Label an executor on the Home Assistant Docker host
-`home-assistant`; it needs Docker Compose v2, `curl`, Python 3, access to
-the deployment directory, and Docker permissions. Jenkins reads the public
-GitHub Actions run API, so no GitHub token is required. Run the job once after
-setup; subsequent relevant `master` pushes start it through GitHub Actions.
+`docker-agent`; it needs Docker Compose v2, `curl`, Python 3, access to
+the deployment directory, and non-interactive `sudo` access to Docker. The
+pipeline uses `sudo -n docker`, so it fails immediately if sudo would prompt
+for a password. Grant only the Jenkins agent account the required Docker
+access; Docker access is effectively root-level, so do not grant general sudo.
+Jenkins reads the public GitHub Actions run API, so no GitHub token is required.
+Run the job once after setup; subsequent relevant `master` pushes start it
+through GitHub Actions.
 Review the Trivy report linked in the Jenkins approval prompt before approving
 deployment.
 
