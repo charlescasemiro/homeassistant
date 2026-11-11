@@ -73,7 +73,7 @@ pipeline {
                         ''',
                         returnStdout: true
                     ).trim().readLines().findAll {
-                        it.startsWith('ghcr.io/docker-agent/docker-agent:')
+                        it.startsWith('ghcr.io/home-assistant/home-assistant:')
                     }
 
                     if (images.size() != 1) {
