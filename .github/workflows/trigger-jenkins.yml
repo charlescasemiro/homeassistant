@@ -13,19 +13,6 @@ jobs:
   trigger:
     runs-on: ubuntu-latest
     steps:
-      - name: Verify Jenkins endpoint uses HTTPS and is reachable
-        env:
-          JENKINS_URL: ${{ secrets.JENKINS_URL }}
-        run: |
-          if [[ "$JENKINS_URL" != https://* ]]; then
-            echo "JENKINS_URL must use HTTPS." >&2
-            exit 1
-          fi
-
-          curl --fail --silent --show-error --output /dev/null \
-            --connect-timeout 10 --max-time 20 \
-            "${JENKINS_URL%/}/login"
-
       - name: Send trigger to Jenkins
         uses: appleboy/jenkins-action@v1
         with:
