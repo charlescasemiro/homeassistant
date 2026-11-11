@@ -19,7 +19,7 @@ pipeline {
     stages {
         stage('Checkout master') {
             agent {
-                label 'homeassistant-docker'
+                label 'home-assistant'
             }
             steps {
                 checkout scm
@@ -74,7 +74,7 @@ pipeline {
 
         stage('Wait for GitHub Actions scan') {
             agent {
-                label 'homeassistant-docker'
+                label 'home-assistant'
             }
             when {
                 expression {
@@ -163,7 +163,7 @@ print(url)
 
         stage('Pull and restart Home Assistant') {
             agent {
-                label 'homeassistant-docker'
+                label 'home-assistant'
             }
             when {
                 expression {
