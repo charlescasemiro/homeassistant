@@ -20,7 +20,7 @@ pipeline {
     stages {
         stage('Checkout master') {
             agent {
-                label 'home-assistant'
+                label 'docker-agent'
             }
             steps {
                 script {
@@ -58,7 +58,7 @@ pipeline {
 
         stage('Detect Home Assistant image update') {
             agent {
-                label 'home-assistant'
+                label 'docker-agent'
             }
             steps {
                 script {
@@ -73,7 +73,7 @@ pipeline {
                         ''',
                         returnStdout: true
                     ).trim().readLines().findAll {
-                        it.startsWith('ghcr.io/home-assistant/home-assistant:')
+                        it.startsWith('ghcr.io/docker-agent/docker-agent:')
                     }
 
                     if (images.size() != 1) {
@@ -98,7 +98,7 @@ pipeline {
 
         stage('Wait for GitHub Actions scan') {
             agent {
-                label 'home-assistant'
+                label 'docker-agent'
             }
             when {
                 expression {
@@ -187,7 +187,7 @@ print(url)
 
         stage('Pull and restart Home Assistant') {
             agent {
-                label 'home-assistant'
+                label 'docker-agent'
             }
             when {
                 expression {
