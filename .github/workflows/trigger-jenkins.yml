@@ -1,0 +1,20 @@
+name: Trigger Jenkins Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send trigger to Jenkins
+        uses: appleboy/jenkins-action@v1
+        with:
+          url: ${{ secrets.JENKINS_URL }}
+          user: ${{ secrets.JENKINS_USER }}
+          token: ${{ secrets.JENKINS_TOKEN }}
+          job: "upate-homeassistant" # Replace with your exact Jenkins job name
+          parameters: |
+            GITHUB_REF=${{ github.ref }}
+            GITHUB_SHA=${{ github.sha }}
