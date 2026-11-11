@@ -84,7 +84,57 @@
               "cards": [
                 {
                   "type": "heading",
-                  "heading": "Cumulative estimated energy"
+                  "heading": "Energy consumption by device"
+                },
+                {
+                  "type": "statistics-graph",
+                  "title": "Daily estimated consumption by device - last 7 days",
+                  "entities": [
+                    {
+                      "entity": "sensor.bed_energy",
+                      "name": "Bed"
+                    },
+                    {
+                      "entity": "sensor.hall_energy",
+                      "name": "Hall"
+                    },
+                    {
+                      "entity": "sensor.smartplug_1_energy",
+                      "name": "Smart Plug 1"
+                    },
+                    {
+                      "entity": "sensor.smartplug_2_energy",
+                      "name": "Smart Plug 2"
+                    },
+                    {
+                      "entity": "sensor.charles_office_energy",
+                      "name": "Charles Office"
+                    },
+                    {
+                      "entity": "sensor.toilet_energy",
+                      "name": "Toilet"
+                    },
+                    {
+                      "entity": "sensor.living_room_energy",
+                      "name": "Living Room"
+                    },
+                    {
+                      "entity": "sensor.frontdoor_energy",
+                      "name": "Front Door"
+                    },
+                    {
+                      "entity": "sensor.hallway_1_energy",
+                      "name": "Hallway 1"
+                    }
+                  ],
+                  "days_to_show": 7,
+                  "period": "day",
+                  "stat_types": [
+                    "change"
+                  ],
+                  "chart_type": "bar-stack",
+                  "hide_legend": false,
+                  "logarithmic_scale": false
                 },
                 {
                   "type": "markdown",
@@ -92,7 +142,7 @@
                 },
                 {
                   "type": "entities",
-                  "title": "Energy by device",
+                  "title": "Cumulative energy estimates",
                   "entities": [
                     {
                       "entity": "sensor.bed_energy"
