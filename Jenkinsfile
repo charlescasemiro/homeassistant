@@ -34,7 +34,7 @@ pipeline {
 
         stage('Detect Home Assistant image update') {
             agent {
-                label 'homeassistant-docker'
+                label 'home-assistant'
             }
             steps {
                 script {
