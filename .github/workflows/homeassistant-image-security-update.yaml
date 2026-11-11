@@ -1,0 +1,100 @@
+name: Home Assistant image security update
+
+on:
+  schedule:
+    - cron: "23 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  scan-and-propose-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Find latest stable Home Assistant release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(gh api repos/home-assistant/core/releases/latest --jq '.tag_name | ltrimstr("v")')"
+          if [[ ! "$version" =~ ^[0-9]{4}\.[0-9]{1,2}\.[0-9]{1,2}$ ]]; then
+            echo "Unexpected Home Assistant release tag: $version" >&2
+            exit 1
+          fi
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "image=ghcr.io/home-assistant/home-assistant:$version" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Trivy
+        uses: aquasecurity/setup-trivy@v0.2.4
+
+      - name: Scan latest stable image for vulnerabilities
+        env:
+          IMAGE: ${{ steps.release.outputs.image }}
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          report="$RUNNER_TEMP/trivy-report.json"
+          trivy image --scanners vuln --format json --output "$report" "$IMAGE"
+
+          summary="$(jq -r '
+            [.Results[]?.Vulnerabilities[]?] as $vulnerabilities |
+            if ($vulnerabilities | length) == 0 then
+              "No vulnerabilities were reported."
+            else
+              $vulnerabilities
+              | group_by(.Severity)
+              | map("- " + .[0].Severity + ": " + (length | tostring))
+              | join("\n")
+            end
+          ' "$report")"
+
+          {
+            printf 'This PR proposes the latest stable Home Assistant image, `%s`.\n\n' "$VERSION"
+            printf 'Trivy vulnerability scan summary:\n%s\n\n' "$summary"
+            printf 'The full Trivy JSON report is attached to the workflow run as an artifact. This workflow does not deploy or merge the update.\n'
+          } > "$RUNNER_TEMP/pr-body.md"
+
+      - name: Upload vulnerability report
+        uses: actions/upload-artifact@v4
+        with:
+          name: homeassistant-image-vulnerability-report
+          path: ${{ runner.temp }}/trivy-report.json
+          if-no-files-found: error
+
+      - name: Update Compose image reference
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import os
+          import re
+
+          path = Path("docker-compose.yaml")
+          compose = path.read_text()
+          pattern = re.compile(
+              r"(?m)^(    image: ghcr\.io/home-assistant/home-assistant:)[^\r\n]+$"
+          )
+          updated, replacements = pattern.subn(
+              lambda match: f"{match.group(1)}{os.environ['VERSION']}", compose
+          )
+          if replacements != 1:
+              raise SystemExit(
+                  f"Expected exactly one Home Assistant image reference, found {replacements}"
+              )
+          path.write_text(updated)
+          PY
+
+      - name: Open or update image-update pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: automation/homeassistant-image-security-update
+          delete-branch: true
+          commit-message: "Update Home Assistant image to ${{ steps.release.outputs.version }}"
+          title: "Update Home Assistant image to ${{ steps.release.outputs.version }}"
+          body-path: ${{ runner.temp }}/pr-body.md
