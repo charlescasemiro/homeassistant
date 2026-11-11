@@ -12,10 +12,35 @@
           "header": {
             "card": {
               "type": "markdown",
-              "content": "## POKEHOUSE POWER\nPer-device power and energy values below are **Powercalc estimates**, not direct meter readings. Energy values are cumulative estimates, not daily totals."
+              "content": "## POKEHOUSE POWER\n**SmartHub cloud:** {{ 'Online' if is_state('binary_sensor.smarthub_cloud_connection', 'on') else 'Offline' }}\nPer-device power and energy values below are **Powercalc estimates**, not direct meter readings. Energy values are cumulative estimates, not daily totals."
             }
           },
-          "badges": [],
+          "badges": [
+            {
+              "type": "entity",
+              "entity": "binary_sensor.smarthub_cloud_connection",
+              "name": "SmartHub",
+              "show_name": true,
+              "show_state": true,
+              "show_icon": true
+            },
+            {
+              "type": "shortcut",
+              "icon": "mdi:cctv",
+              "tap_action": {
+                "action": "navigate",
+                "navigation_path": "/dashboard-camera"
+              }
+            },
+            {
+              "type": "shortcut",
+              "icon": "mdi:lightbulb-multiple",
+              "tap_action": {
+                "action": "navigate",
+                "navigation_path": "/dashboard-bulbs"
+              }
+            }
+          ],
           "sections": [
             {
               "type": "grid",
@@ -84,7 +109,57 @@
               "cards": [
                 {
                   "type": "heading",
-                  "heading": "Cumulative estimated energy"
+                  "heading": "Energy consumption by device"
+                },
+                {
+                  "type": "statistics-graph",
+                  "title": "Daily estimated consumption by device - last 7 days",
+                  "entities": [
+                    {
+                      "entity": "sensor.bed_energy",
+                      "name": "Bed"
+                    },
+                    {
+                      "entity": "sensor.hall_energy",
+                      "name": "Hall"
+                    },
+                    {
+                      "entity": "sensor.smartplug_1_energy",
+                      "name": "Smart Plug 1"
+                    },
+                    {
+                      "entity": "sensor.smartplug_2_energy",
+                      "name": "Smart Plug 2"
+                    },
+                    {
+                      "entity": "sensor.charles_office_energy",
+                      "name": "Charles Office"
+                    },
+                    {
+                      "entity": "sensor.toilet_energy",
+                      "name": "Toilet"
+                    },
+                    {
+                      "entity": "sensor.living_room_energy",
+                      "name": "Living Room"
+                    },
+                    {
+                      "entity": "sensor.frontdoor_energy",
+                      "name": "Front Door"
+                    },
+                    {
+                      "entity": "sensor.hallway_1_energy",
+                      "name": "Hallway 1"
+                    }
+                  ],
+                  "days_to_show": 7,
+                  "period": "day",
+                  "stat_types": [
+                    "change"
+                  ],
+                  "chart_type": "bar-stack",
+                  "hide_legend": false,
+                  "logarithmic_scale": false
                 },
                 {
                   "type": "markdown",
@@ -92,7 +167,7 @@
                 },
                 {
                   "type": "entities",
-                  "title": "Energy by device",
+                  "title": "Cumulative energy estimates",
                   "entities": [
                     {
                       "entity": "sensor.bed_energy"
@@ -122,6 +197,45 @@
                       "entity": "sensor.smartplug_1_energy"
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {
+                  "type": "heading",
+                  "heading": "Grid & connectivity"
+                },
+                {
+                  "type": "tile",
+                  "entity": "sensor.electricity_maps_co2_intensity",
+                  "name": "Grid CO2 intensity",
+                  "icon": "mdi:molecule-co2"
+                },
+                {
+                  "type": "tile",
+                  "entity": "sensor.electricity_maps_grid_fossil_fuel_percentage",
+                  "name": "Grid fossil fuel",
+                  "icon": "mdi:factory"
+                },
+                {
+                  "type": "tile",
+                  "entity": "sensor.sagemcom_fast5696_download_speed",
+                  "name": "Internet download",
+                  "icon": "mdi:download"
+                },
+                {
+                  "type": "tile",
+                  "entity": "sensor.sagemcom_fast5696_upload_speed",
+                  "name": "Internet upload",
+                  "icon": "mdi:upload"
+                },
+                {
+                  "type": "tile",
+                  "entity": "binary_sensor.sagemcom_fast5696_wan_status",
+                  "name": "WAN status",
+                  "icon": "mdi:wan"
                 }
               ]
             }
