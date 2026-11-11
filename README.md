@@ -35,7 +35,6 @@ deployment.
 
 The `Trigger Jenkins Pipeline` GitHub Actions workflow starts Jenkins for the
 same master-branch paths that start the image scan and passes the triggering
-commit SHA and ref. Configure `JENKINS_URL`, `JENKINS_USER`, and `JENKINS_TOKEN`
-as GitHub Actions secrets. `JENKINS_URL` must be an HTTPS endpoint reachable
-from GitHub-hosted runners; the workflow checks TLS connectivity before
-triggering the Jenkins job.
+commit SHA and ref. It uses `https://jenkins.pokehouse.date`; configure
+`JENKINS_USER` and `JENKINS_API_TOKEN` as GitHub Actions secrets. The workflow
+checks HTTPS connectivity before sending credentials to Jenkins.

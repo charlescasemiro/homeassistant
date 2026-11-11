@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - .github/workflows/homeassistant-image-security-update.yaml
+      - .github/workflows/trigger-jenkins.yml
       - docker-compose.yaml
       - Jenkinsfile
   schedule:

@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - .github/workflows/homeassistant-image-security-update.yaml
+      - .github/workflows/trigger-jenkins.yml
       - docker-compose.yaml
       - Jenkinsfile
 
@@ -13,12 +14,18 @@ jobs:
   trigger:
     runs-on: ubuntu-latest
     steps:
+      - name: Verify Jenkins endpoint uses HTTPS and is reachable
+        run: |
+          curl --fail --silent --show-error --output /dev/null \
+            --connect-timeout 10 --max-time 20 \
+            "https://jenkins.pokehouse.date/login"
+
       - name: Send trigger to Jenkins
         uses: appleboy/jenkins-action@v1
         with:
-          url: ${{ secrets.JENKINS_URL }}
+          url: https://jenkins.pokehouse.date
           user: ${{ secrets.JENKINS_USER }}
-          token: ${{ secrets.JENKINS_TOKEN }}
+          token: ${{ secrets.JENKINS_API_TOKEN }}
           job: "update-homeassistant" # Replace with your exact Jenkins job name
           parameters: |
             GITHUB_REF=${{ github.ref }}
