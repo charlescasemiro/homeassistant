@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "lovelace.power_usage",
+  "data": {
+    "config": {
+      "views": [
+        {
+          "type": "sections",
+          "title": "Power Usage",
+          "path": "energy-overview",
+          "header": {
+            "card": {
+              "type": "markdown",
+              "content": "## POKEHOUSE POWER\nPer-device power and energy values below are **Powercalc estimates**, not direct meter readings. Energy values are cumulative estimates, not daily totals."
+            }
+          },
+          "badges": [],
+          "sections": [
+            {
+              "type": "grid",
+              "cards": [
+                {
+                  "type": "heading",
+                  "heading": "Estimated live power"
+                },
+                {
+                  "type": "markdown",
+                  "content": "### Highest current draw\n{% set devices = [\n  {'name': 'Hallway 1', 'power': states('sensor.hallway_1_power') | float(0)},\n  {'name': 'Bed', 'power': states('sensor.bed_power') | float(0)},\n  {'name': 'Hall', 'power': states('sensor.hall_power') | float(0)},\n  {'name': 'Smart Plug 1', 'power': states('sensor.smartplug_1_power') | float(0)},\n  {'name': 'Smart Plug 2', 'power': states('sensor.smartplug_2_power') | float(0)},\n  {'name': 'Charles Office', 'power': states('sensor.charles_office_power') | float(0)},\n  {'name': 'Toilet', 'power': states('sensor.toilet_power') | float(0)},\n  {'name': 'Living Room', 'power': states('sensor.living_room_power') | float(0)},\n  {'name': 'Front Door', 'power': states('sensor.frontdoor_power') | float(0)}\n] %}\n{% for device in devices | sort(attribute='power', reverse=true) %}{{ loop.index }}. **{{ device.name }}** - {{ device.power | round(1) }} W<br>\n{% endfor %}"
+                },
+                {
+                  "type": "entities",
+                  "title": "Power by device",
+                  "entities": [
+                    {
+                      "entity": "sensor.bed_power"
+                    },
+                    {
+                      "entity": "sensor.hall_power"
+                    },
+                    {
+                      "entity": "sensor.smartplug_2_power"
+                    },
+                    {
+                      "entity": "sensor.charles_office_power"
+                    },
+                    {
+                      "entity": "sensor.toilet_power"
+                    },
+                    {
+                      "entity": "sensor.living_room_power"
+                    },
+                    {
+                      "entity": "sensor.frontdoor_power"
+                    },
+                    {
+                      "entity": "sensor.hallway_1_power"
+                    },
+                    {
+                      "entity": "sensor.smartplug_1_power"
+                    }
+                  ]
+                },
+                {
+                  "type": "history-graph",
+                  "title": "Estimated power over the last 24 hours",
+                  "hours_to_show": 24,
+                  "entities": [
+                    "sensor.bed_power",
+                    "sensor.hall_power",
+                    "sensor.smartplug_2_power",
+                    "sensor.charles_office_power",
+                    "sensor.toilet_power",
+                    "sensor.living_room_power",
+                    "sensor.frontdoor_power",
+                    "sensor.hallway_1_power",
+                    "sensor.smartplug_1_power"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {
+                  "type": "heading",
+                  "heading": "Cumulative estimated energy"
+                },
+                {
+                  "type": "markdown",
+                  "content": "### Highest cumulative energy\n{% set devices = [\n  {'name': 'Bed', 'energy': states('sensor.bed_energy') | float(0)},\n  {'name': 'Hall', 'energy': states('sensor.hall_energy') | float(0)},\n  {'name': 'Smart Plug 1', 'energy': states('sensor.smartplug_1_energy') | float(0)},\n  {'name': 'Smart Plug 2', 'energy': states('sensor.smartplug_2_energy') | float(0)},\n  {'name': 'Charles Office', 'energy': states('sensor.charles_office_energy') | float(0)},\n  {'name': 'Toilet', 'energy': states('sensor.toilet_energy') | float(0)},\n  {'name': 'Living Room', 'energy': states('sensor.living_room_energy') | float(0)},\n  {'name': 'Front Door', 'energy': states('sensor.frontdoor_energy') | float(0)},\n  {'name': 'Hallway 1', 'energy': states('sensor.hallway_1_energy') | float(0)}\n] %}\n{% for device in devices | sort(attribute='energy', reverse=true) %}{{ loop.index }}. **{{ device.name }}** - {{ device.energy | round(3) }} kWh<br>\n{% endfor %}"
+                },
+                {
+                  "type": "entities",
+                  "title": "Energy by device",
+                  "entities": [
+                    {
+                      "entity": "sensor.bed_energy"
+                    },
+                    {
+                      "entity": "sensor.hall_energy"
+                    },
+                    {
+                      "entity": "sensor.smartplug_2_energy"
+                    },
+                    {
+                      "entity": "sensor.charles_office_energy"
+                    },
+                    {
+                      "entity": "sensor.toilet_energy"
+                    },
+                    {
+                      "entity": "sensor.living_room_energy"
+                    },
+                    {
+                      "entity": "sensor.frontdoor_energy"
+                    },
+                    {
+                      "entity": "sensor.hallway_1_energy"
+                    },
+                    {
+                      "entity": "sensor.smartplug_1_energy"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
