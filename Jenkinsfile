@@ -6,8 +6,9 @@ pipeline {
         skipDefaultCheckout(true)
     }
 
-    triggers {
-        pollSCM('H/5 * * * *')
+    parameters {
+        string(name: 'GITHUB_REF', defaultValue: '', description: 'GitHub ref that triggered this build')
+        string(name: 'GITHUB_SHA', defaultValue: '', description: 'Commit SHA that triggered this build')
     }
 
     environment {
@@ -22,12 +23,35 @@ pipeline {
                 label 'home-assistant'
             }
             steps {
-                checkout scm
                 script {
+                    def requestedSha = params.GITHUB_SHA?.trim()
+                    def requestedRef = params.GITHUB_REF?.trim()
+
+                    if (requestedSha) {
+                        if (!(requestedSha ==~ /[0-9a-f]{40}/)) {
+                            error('GITHUB_SHA must be a 40-character lowercase commit SHA')
+                        }
+                        if (requestedRef != 'refs/heads/master') {
+                            error("Expected GITHUB_REF refs/heads/master, found ${requestedRef}")
+                        }
+
+                        checkout([
+                            $class: 'GitSCM',
+                            branches: [[name: requestedSha]],
+                            doGenerateSubmoduleConfigurations: false,
+                            userRemoteConfigs: scm.userRemoteConfigs
+                        ])
+                    } else {
+                        checkout scm
+                    }
+
                     env.HA_GIT_COMMIT = sh(
                         script: 'git rev-parse HEAD',
                         returnStdout: true
                     ).trim()
+                    if (requestedSha && env.HA_GIT_COMMIT != requestedSha) {
+                        error("Expected commit ${requestedSha}, checked out ${env.HA_GIT_COMMIT}")
+                    }
                 }
             }
         }
