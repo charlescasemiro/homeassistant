@@ -21,6 +21,7 @@ the GitHub scan on that exact commit to succeed, then pauses for a Jenkins
 approval. After approval it pulls and recreates only the `homeassistant`
 service, using the checked-out Compose file with `/home/pokehouse/homeassistant`
 as the project directory so bind mounts continue to point at the live data.
+It then verifies the running container image matches the pinned Compose image.
 
 Create a Jenkins Pipeline job using this repository, branch `*/master`, and
 script path `Jenkinsfile`. Label an executor on the Home Assistant Docker host

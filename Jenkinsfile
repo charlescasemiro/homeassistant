@@ -188,6 +188,11 @@ print(url)
                       --project-name homeassistant \
                       --file "$WORKSPACE/docker-compose.yaml" \
                       ps homeassistant
+                    running_image="$(docker inspect --type container --format='{{.Config.Image}}' homeassistant)"
+                    if [ "$running_image" != "$HA_TARGET_IMAGE" ]; then
+                      echo "Expected $HA_TARGET_IMAGE after deployment, found $running_image" >&2
+                      exit 1
+                    fi
                 '''
             }
         }
