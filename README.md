@@ -3,11 +3,11 @@
 ## Home Assistant image security updates
 
 The `Home Assistant image security update` workflow runs weekly, on demand, and
-when the workflow definition or Compose file changes on `master`. It finds the
-latest stable Home Assistant Core release, scans the corresponding container
-image with Trivy, and opens or updates a pull request with the image version in
-`docker-compose.yaml`. The full vulnerability report is retained as a workflow
-artifact.
+when the workflow definition, Compose file, or `Jenkinsfile` changes on
+`master`. It finds the latest stable Home Assistant Core release, scans the
+corresponding container image with Trivy, and opens or updates a pull request
+with the image version in `docker-compose.yaml`. The full vulnerability report
+is retained as a workflow artifact.
 
 The workflow only proposes an update; it does not deploy or merge it. For
 pull-request creation to work, enable **Allow GitHub Actions to create and
@@ -24,7 +24,7 @@ as the project directory so bind mounts continue to point at the live data.
 
 Create a Jenkins Pipeline job using this repository, branch `*/master`, and
 script path `Jenkinsfile`. Label an executor on the Home Assistant Docker host
-`homeassistant-docker`; it needs Docker Compose v2, `curl`, Python 3, access to
+`home-assistant`; it needs Docker Compose v2, `curl`, Python 3, access to
 the deployment directory, and Docker permissions. Jenkins reads the public
 GitHub Actions run API, so no GitHub token is required. Run the job once after
 setup; later master changes are polled automatically. Review the Trivy report
