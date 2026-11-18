@@ -1,5 +1,8 @@
 version: '3.8'
 
+volumes:
+  jenkins_home:
+
 services:
   cloudflared:
     image: cloudflare/cloudflared:latest
@@ -35,11 +38,21 @@ services:
       - ./matter-data:/data
       - /run/dbus:/run/dbus:ro # Enables Matter commissioning via host Bluetooth
 
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - jenkins_home:/var/jenkins_home
+
   jenkins-agent:
     image: jenkins/inbound-agent:latest
     container_name: jenkins-agent
     restart: unless-stopped
     network_mode: host
+    depends_on:
+      - jenkins
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command:
