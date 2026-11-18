@@ -67,5 +67,3 @@ services:
       - ${JENKINS_AGENT_SECRET}
       - -name
       - jenkins-agent
-    env_file:
-      - .env
