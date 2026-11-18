@@ -1,5 +1,2 @@
-2026-08-31 17:46:25.336 WARNING (ImportExecutor_0) [py.warnings] /usr/local/lib/python3.14/site-packages/rich/segment.py:547: SyntaxWarning: 'return' in a 'finally' block
-  return
-
-2026-08-31 17:46:26.122 WARNING (MainThread) [homeassistant.components.http.ban] Login attempt or request with invalid authentication from localhost (127.0.0.1). Requested URL: '/auth/token'. (Mozilla/5.0 (X11; Linux x86_64; rv:150.0) Gecko/20100101 Firefox/150.0)
-2026-08-31 17:46:26.157 WARNING (MainThread) [homeassistant.components.http.ban] Login attempt or request with invalid authentication from localhost (127.0.0.1). Requested URL: '/api/websocket'. (Mozilla/5.0 (X11; Linux x86_64; rv:150.0) Gecko/20100101 Firefox/150.0)
+2026-11-18 15:27:48.816+00:00 WARNING (Recorder) [homeassistant.components.recorder.util] The system could not validate that the sqlite3 database at //config/home-assistant_v2.db was shutdown cleanly
+2026-11-18 15:27:48.896+00:00 WARNING (Recorder) [homeassistant.components.recorder.util] Ended unfinished session (id=1 from 2026-08-31 17:46:16.601475)

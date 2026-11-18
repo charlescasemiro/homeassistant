@@ -12,8 +12,6 @@ services:
       - tunnel
       - --no-autoupdate
       - run
-      - --token
-      - ${TUNNEL_TOKEN:?Set TUNNEL_TOKEN in your .env file}
     network_mode: host
     
   homeassistant:
@@ -64,6 +62,6 @@ services:
       - -url
       - http://localhost:8080
       - -secret
-      - ${JENKINS_AGENT_SECRET:?Set JENKINS_AGENT_SECRET in your environment}
+      - ${JENKINS_AGENT_SECRET}
       - -name
       - docker-agent
