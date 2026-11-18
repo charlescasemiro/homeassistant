@@ -12,7 +12,7 @@
           "header": {
             "card": {
               "type": "markdown",
-              "content": "## POKEHOUSE POWER\n**SmartHub cloud:** {{ 'Online' if is_state('binary_sensor.smarthub_cloud_connection', 'on') else 'Offline' }}\nPer-device power and energy values below are **Powercalc estimates**, not direct meter readings. Energy values are cumulative estimates, not daily totals."
+              "content": "## POKEHOUSE POWER\n**SmartHub cloud:** {{ 'Online' if is_state('binary_sensor.smarthub_cloud_connection', 'on') else 'Offline' }}\nPer-device power and energy values below are **Powercalc estimates**, not direct meter readings. Energy values are cumulative estimates, not daily totals.\nThe current setup covers 9 supported TP-Link devices. Each P100 plug shows its 1.39 W self-use estimate only; connected appliance loads are unknown. Estimates start when configured and are not backfilled. Other TP-Link devices currently have no power entities."
             }
           },
           "badges": [
@@ -85,6 +85,44 @@
                       "entity": "sensor.smartplug_1_power"
                     }
                   ]
+                },
+                {
+                  "type": "entities",
+                  "title": "Powercalc aggregate sensors",
+                  "entities": [
+                    {
+                      "entity": "sensor.daily_usage_power",
+                      "name": "Daily usage power"
+                    },
+                    {
+                      "entity": "sensor.daily_usage_energy",
+                      "name": "Daily usage energy"
+                    },
+                    {
+                      "entity": "sensor.all_standby_power",
+                      "name": "All standby power"
+                    },
+                    {
+                      "entity": "sensor.all_standby_energy",
+                      "name": "All standby energy"
+                    }
+                  ],
+                  "show_header_toggle": false
+                },
+                {
+                  "type": "entities",
+                  "title": "TP-Link P100 plug status",
+                  "entities": [
+                    {
+                      "entity": "switch.office_1_smartplug_1",
+                      "name": "Smart Plug 1"
+                    },
+                    {
+                      "entity": "switch.office_2_smartplug_2",
+                      "name": "Smart Plug 2"
+                    }
+                  ],
+                  "show_header_toggle": false
                 },
                 {
                   "type": "history-graph",
