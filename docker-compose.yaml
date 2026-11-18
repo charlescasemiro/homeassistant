@@ -12,6 +12,8 @@ services:
       - tunnel
       - --no-autoupdate
       - run
+    env_file:
+      - .env
     network_mode: host
     
   homeassistant:
@@ -64,4 +66,6 @@ services:
       - -secret
       - ${JENKINS_AGENT_SECRET}
       - -name
-      - docker-agent
+      - jenkins-agent
+    env_file:
+      - .env
