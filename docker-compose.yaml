@@ -34,3 +34,18 @@ services:
     volumes:
       - ./matter-data:/data
       - /run/dbus:/run/dbus:ro # Enables Matter commissioning via host Bluetooth
+
+  jenkins-agent:
+    image: jenkins/inbound-agent:latest
+    container_name: jenkins-agent
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - -url
+      - http://localhost:8080
+      - -secret
+      - ${JENKINS_AGENT_SECRET:?Set JENKINS_AGENT_SECRET in your environment}
+      - -name
+      - docker-agent
