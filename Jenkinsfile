@@ -20,7 +20,7 @@ pipeline {
     stages {
         stage('Checkout master') {
             agent {
-                label 'docker-agent'
+                label 'jenkins-agent'
             }
             steps {
                 script {
@@ -58,7 +58,7 @@ pipeline {
 
         stage('Detect Home Assistant image update') {
             agent {
-                label 'docker-agent'
+                label 'jenkins-agent'
             }
             steps {
                 script {
@@ -98,7 +98,7 @@ pipeline {
 
         stage('Wait for GitHub Actions scan') {
             agent {
-                label 'docker-agent'
+                label 'jenkins-agent'
             }
             when {
                 expression {
@@ -187,7 +187,7 @@ print(url)
 
         stage('Pull and restart Home Assistant') {
             agent {
-                label 'docker-agent'
+                label 'jenkins-agent'
             }
             when {
                 expression {
