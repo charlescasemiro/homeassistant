@@ -5,7 +5,12 @@ services:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared
     restart: unless-stopped
-    command: tunnel --no-autoupdate run --token YOUR_COPIED_TOKEN_HERE
+    command:
+      - tunnel
+      - --no-autoupdate
+      - run
+      - --token
+      - ${TUNNEL_TOKEN:?Set TUNNEL_TOKEN in your .env file}
     network_mode: host
     
   homeassistant:
