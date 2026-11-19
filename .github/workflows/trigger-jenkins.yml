@@ -18,12 +18,12 @@ jobs:
         run: |
           curl --fail --silent --show-error --output /dev/null \
             --connect-timeout 10 --max-time 20 \
-            "https://jenkins.pokehouse.date/login"
+            "${{ vars.JENKINS_URL }}/login"
 
       - name: Send trigger to Jenkins
         uses: appleboy/jenkins-action@v1
         with:
-          url: ${{ secrets.JENKINS_URL }}
+          url: ${{ vars.JENKINS_URL }}
           user: ${{ secrets.JENKINS_USER }}
           token: ${{ secrets.JENKINS_API_TOKEN }}
           job: "update-homeassistant" # Replace with your exact Jenkins job name
