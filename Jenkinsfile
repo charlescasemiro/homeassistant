@@ -20,10 +20,8 @@ pipeline {
     stages {
         stage('Checkout master') {
             agent {
-                docker {
-                    image 'docker:27-cli'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                    reuseNode true
+                node {
+                    label 'jenkins-agent'
                     customWorkspace '/home/jenkins/agent/workspace/homeassistant-update'
                 }
             }
@@ -63,10 +61,9 @@ pipeline {
 
         stage('Detect Home Assistant image update') {
             agent {
-                docker {
-                    image 'docker:27-cli'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                    reuseNode true
+                node {
+                    label 'jenkins-agent'
+                    customWorkspace '/home/jenkins/agent/workspace/homeassistant-update'
                 }
             }
             steps {
