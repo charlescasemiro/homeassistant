@@ -20,7 +20,10 @@ pipeline {
     stages {
         stage('Checkout master') {
             agent {
-                label 'jenkins-agent'
+                node {
+                    label 'jenkins-agent'
+                    customWorkspace '/home/jenkins/agent/workspace/homeassistant-update'
+                }
             }
             steps {
                 script {
@@ -58,7 +61,10 @@ pipeline {
 
         stage('Detect Home Assistant image update') {
             agent {
-                label 'jenkins-agent'
+                node {
+                    label 'jenkins-agent'
+                    customWorkspace '/home/jenkins/agent/workspace/homeassistant-update'
+                }
             }
             steps {
                 script {
@@ -98,7 +104,10 @@ pipeline {
 
         stage('Wait for GitHub Actions scan') {
             agent {
-                label 'jenkins-agent'
+                node {
+                    label 'jenkins-agent'
+                    customWorkspace '/home/jenkins/agent/workspace/homeassistant-update'
+                }
             }
             when {
                 expression {
@@ -187,7 +196,10 @@ print(url)
 
         stage('Pull and restart Home Assistant') {
             agent {
-                label 'jenkins-agent'
+                node {
+                    label 'jenkins-agent'
+                    customWorkspace '/home/jenkins/agent/workspace/homeassistant-update'
+                }
             }
             when {
                 expression {
